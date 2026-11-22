@@ -581,9 +581,9 @@ export default function SignBridgeDashboard() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans transition-colors ${accessibilityMode ? 'bg-white text-black' : 'bg-[#F7F9FC] text-[#14264F]'}`}>
+    <div className={`min-h-screen w-full max-w-full overflow-x-hidden flex flex-col font-sans transition-colors ${accessibilityMode ? 'bg-white text-black' : 'bg-[#F7F9FC] text-[#14264F]'}`}>
       {/* ── TOP NAVIGATION (Height ~72px) ─────────────────────────────────── */}
-      <header className="h-[72px] bg-white border-b border-[#DCE5EF] px-6 sm:px-8 flex items-center justify-between shrink-0 shadow-sm z-30">
+      <header className="h-[72px] bg-white border-b border-[#DCE5EF] px-3 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 shadow-sm z-30 w-full max-w-full overflow-x-hidden">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <span className="text-2xl font-black text-[#14264F] tracking-tight">SignBridge <span className="text-[#12B8C2]">Edu</span></span>
@@ -650,10 +650,10 @@ export default function SignBridgeDashboard() {
       </header>
 
       {/* ── MAIN WORKSPACE CONTAINER ───────────────────────────────────────── */}
-      <div className="flex-1 flex flex-col md:flex-row min-h-0">
+      <div className="flex-1 flex flex-col md:flex-row min-h-0 w-full max-w-full overflow-x-hidden">
         {/* ── LEFT SIDEBAR (Width ~220px) ─────────────────────────────────── */}
-        <aside className="w-full md:w-[220px] bg-white border-r border-[#DCE5EF] p-4 flex md:flex-col justify-between shrink-0 shadow-sm z-20">
-          <nav className="flex md:flex-col gap-1.5 w-full">
+        <aside className="w-full md:w-[220px] bg-white border-r md:border-r border-b md:border-b-0 border-[#DCE5EF] p-2.5 sm:p-4 flex md:flex-col justify-between shrink-0 shadow-sm z-20 overflow-x-auto">
+          <nav className="flex md:flex-col gap-1.5 w-full overflow-x-auto pb-1 md:pb-0 scrollbar-none">
             {/* 1. Kannada AI Science Tutor */}
             <button
               onClick={() => setNavSection('tutor')}
@@ -811,7 +811,18 @@ export default function SignBridgeDashboard() {
         </aside>
 
         {/* ── MAIN CONTENT VIEWPORT ─────────────────────────────────────────── */}
-        <main className="flex-1 p-3.5 sm:p-4 lg:p-5 overflow-y-auto max-w-[1440px] mx-auto w-full flex flex-col gap-3.5">
+        <main className="flex-1 p-3 sm:p-4 lg:p-5 overflow-y-auto max-w-[1440px] mx-auto w-full min-w-0 flex flex-col gap-3.5">
+          {/* ── KANNADA SCIENCE AI TUTOR VIEW ── */}
+          {navSection === 'tutor' && <ScienceTutorView />}
+
+          {/* ── STUDENT DASHBOARD VIEW ── */}
+          {navSection === 'studentDashboard' && (
+            <StudentDashboardView onNavigateToTopic={(tId) => setNavSection('tutor')} />
+          )}
+
+          {/* ── PARENT & TEACHER DASHBOARD VIEW ── */}
+          {navSection === 'parentDashboard' && <ParentDashboardView />}
+
           {navSection === 'dashboard' && (
             <>
               {/* ── RESPONSIVE TWO-COLUMN WORKSPACE: 62%–66% Camera, 34%–38% Recognition & Avatar ─── */}

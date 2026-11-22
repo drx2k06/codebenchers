@@ -608,7 +608,7 @@ export const ScienceTutorView: React.FC = () => {
             <div className="flex items-center gap-1.5">
               <span className="text-xs text-[#71809A]">ಮಟ್ಟ (Level):</span>
               <span
-                className={`text-xs font-bold uppercase px-2.5 py-0.5 rounded-full ${
+                id="adaptive-difficulty-badge" data-testid="adaptive-difficulty-badge" className={`text-xs font-bold uppercase px-2.5 py-0.5 rounded-full ${
                   currentLevel === 'easy'
                     ? 'bg-emerald-100 text-emerald-800'
                     : currentLevel === 'medium'

@@ -1,0 +1,160 @@
+{
+  "timestamp": "2026-11-22T16:04:43.452Z",
+  "checks": [
+    {
+      "name": "Page Initial Load",
+      "passed": true,
+      "details": "HTTP 200"
+    },
+    {
+      "name": "Karnataka Class 8 Header Displayed",
+      "passed": true,
+      "details": "Karnataka Class 8 Science AI Tutor"
+    },
+    {
+      "name": "Initial Document Language",
+      "passed": true,
+      "details": "lang=\"en\""
+    },
+    {
+      "name": "Switch to English",
+      "passed": true,
+      "details": "lang=\"en\", Title=\"Karnataka Class 8 Science AI Tutor\""
+    },
+    {
+      "name": "Switch to Kannada",
+      "passed": true,
+      "details": "lang=\"kn\", Title=\"ಕರ್ನಾಟಕ 8ನೇ ತರಗತಿ ವಿಜ್ಞಾನ AI ಬೋಧಕ\""
+    },
+    {
+      "name": "Chapter Buttons Present",
+      "passed": true,
+      "details": "Found 5 chapters"
+    },
+    {
+      "name": "Sound Chapter Selected",
+      "passed": true,
+      "details": "ಶಬ್ದ (ಧ್ವನಿ)"
+    },
+    {
+      "name": "Rural Analogies Displayed",
+      "passed": true,
+      "details": "Found 4 everyday Karnataka analogies"
+    },
+    {
+      "name": "Practice Tab Active",
+      "passed": true,
+      "details": "ಹೊಂದಿಕೊಳ್ಳುವ ಅಭ್ಯಾಸ (Adaptive)"
+    },
+    {
+      "name": "Adaptive Difficulty Badge Present",
+      "passed": true,
+      "details": "Level: EASY"
+    },
+    {
+      "name": "Option Selection",
+      "passed": true,
+      "details": "Selected option 0"
+    },
+    {
+      "name": "Submit Answer Clicked",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Immediate MCQ Feedback & Explanation",
+      "passed": true,
+      "details": "ಸರಿಯಾದ ಉತ್ತರ! ಅಭಿನಂದನೆಗಳು!\n\nಮಾನವನ ಕಿವಿ 20 ಹರ್ಟ್ಜ್‌ಗಿಂತ ಕಡಿಮೆ (Infrasound) ಅಥವಾ 2..."
+    },
+    {
+      "name": "Student Dashboard Nav Clicked",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Student Profile Rendered",
+      "passed": true,
+      "details": "ಕಾವ್ಯ"
+    },
+    {
+      "name": "4 Key Metrics KPI Cards",
+      "passed": true,
+      "details": "Rendered 4 KPI cards"
+    },
+    {
+      "name": "Parent Dashboard Nav Clicked",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Parent Report Rendered",
+      "passed": true,
+      "details": "ಕಾವ್ಯ ಅವರ ಕಲಿಕಾ ವರದಿ"
+    },
+    {
+      "name": "Strengths & Mastery Box Present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Areas Needing Support Box Present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Doubt Textarea Present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Voice Input Button Present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Photo Upload Input Present",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Tutor Answer Received",
+      "passed": true,
+      "details": "ಮೂಲ ವಿಜ್ಞಾನ ಪರಿಕಲ್ಪನೆ (FUNDAMENTAL SCIENCE CONCEPT)\nModel: SignBridge-Edu-Local-Agent\nಓದಿ ..."
+    },
+    {
+      "name": "Viewport Mobile_360 (360px) No Unintended Overflow",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Viewport Mobile_390 (390px) No Unintended Overflow",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Viewport Mobile_430 (430px) No Unintended Overflow",
+      "passed": true,
+      "details": ""
+    },
+    {
+      "name": "Offline Badge Active When Disconnected",
+      "passed": true,
+      "details": "Pill text: \"ಆಫ್‌ಲೈನ್ ಮೋಡ್ ಸಕ್ರಿಯವಾಗಿದೆ\""
+    },
+    {
+      "name": "Online Status Restored",
+      "passed": true,
+      "details": "Pill text: \"ಆನ್‌ಲೈನ್ ಮೋಡ್\""
+    }
+  ],
+  "screenshots": [
+    "C:\\Users\\drx20\\Downloads\\codebenchers\\SignBridge-Edu\\validation_artifacts\\01_desktop_science_tutor.png",
+    "C:\\Users\\drx20\\Downloads\\codebenchers\\SignBridge-Edu\\validation_artifacts\\02_adaptive_practice_feedback.png",
+    "C:\\Users\\drx20\\Downloads\\codebenchers\\SignBridge-Edu\\validation_artifacts\\03_student_dashboard.png",
+    "C:\\Users\\drx20\\Downloads\\codebenchers\\SignBridge-Edu\\validation_artifacts\\04_parent_dashboard.png",
+    "C:\\Users\\drx20\\Downloads\\codebenchers\\SignBridge-Edu\\validation_artifacts\\05_doubt_resolution.png",
+    "C:\\Users\\drx20\\Downloads\\codebenchers\\SignBridge-Edu\\validation_artifacts\\06_mobile_360px.png",
+    "C:\\Users\\drx20\\Downloads\\codebenchers\\SignBridge-Edu\\validation_artifacts\\06_mobile_390px.png",
+    "C:\\Users\\drx20\\Downloads\\codebenchers\\SignBridge-Edu\\validation_artifacts\\06_mobile_430px.png"
+  ]
+}
