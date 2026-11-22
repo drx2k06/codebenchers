@@ -16,12 +16,19 @@ import { ttsPlayer } from '../lib/speech/tts';
 import { matchSpeechSequence } from '../lib/speech/phraseMatcher';
 import { SentenceDemoMode } from '../components/demo/SentenceDemoMode';
 import { SpeechToISLPanel } from '../components/speech/SpeechToISLPanel';
+import { useI18n } from '../lib/i18n';
+import { ScienceTutorView } from '../components/tutor/ScienceTutorView';
+import { StudentDashboardView } from '../components/dashboard/StudentDashboardView';
+import { ParentDashboardView } from '../components/dashboard/ParentDashboardView';
+
 import {
   ISL_VOCABULARY,
   translateISLGlossSequenceToEnglish,
   RecognitionResult,
   RawLandmarkFrame,
   SupportedLanguage,
+  LANGUAGE_CONFIG,
+  SUPPORTED_LANGUAGES,
 } from '@signbridge/types';
 import {
   LayoutDashboard,
@@ -53,6 +60,10 @@ import {
   Zap,
   Activity,
   RotateCcw,
+  GraduationCap,
+  Award,
+  Users,
+  Languages,
 } from 'lucide-react';
 
 // ── Landmark Normalization and Feature Extraction Helpers ───────────────────
@@ -228,7 +239,7 @@ const QUICK_SIGNS = [
 
 export default function SignBridgeDashboard() {
   // Navigation & View State
-  const [navSection, setNavSection] = useState<'dashboard' | 'meeting' | 'history' | 'settings' | 'demo'>('dashboard');
+  const [navSection, setNavSection] = useState<'tutor' | 'studentDashboard' | 'parentDashboard' | 'dashboard' | 'meeting' | 'history' | 'settings' | 'demo'>('tutor');
   const [meetingId] = useState<string>('SBV-12345');
   const [copiedMeeting, setCopiedMeeting] = useState<boolean>(false);
 
@@ -299,6 +310,7 @@ export default function SignBridgeDashboard() {
     sendFinalSpeech,
     sendTextMessage,
   } = useRealtimeSession('main-room', 'isl_signer');
+  const { t, language } = useI18n();
 
   // Format current timestamp helper
   const getCurrentFormattedTime = useCallback(() => {
@@ -573,13 +585,36 @@ export default function SignBridgeDashboard() {
       {/* ── TOP NAVIGATION (Height ~72px) ─────────────────────────────────── */}
       <header className="h-[72px] bg-white border-b border-[#DCE5EF] px-6 sm:px-8 flex items-center justify-between shrink-0 shadow-sm z-30">
         <div className="flex items-center gap-3">
-          <span className="text-2xl font-black text-[#14264F] tracking-tight">SignBridge</span>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-black text-[#14264F] tracking-tight">SignBridge <span className="text-[#12B8C2]">Edu</span></span>
+            <span className="hidden sm:inline-flex items-center bg-[#E7F4FC] text-[#12B8C2] text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-[#12B8C2]/20">
+              {language === 'kn' ? 'ಕರ್ನಾಟಕ 8ನೇ ತರಗತಿ ವಿಜ್ಞಾನ' : 'Karnataka Class 8 Science'}
+            </span>
+          </div>
           <span className="hidden sm:inline-flex items-center bg-[#E7F4FC] text-[#12B8C2] text-xs font-semibold px-3 py-1 rounded-full border border-[#12B8C2]/20">
             Real-Time Multimodal AI
           </span>
         </div>
 
         <div className="flex items-center gap-3 sm:gap-6">
+          {/* Universal Language Selector */}
+          <div className="flex items-center gap-1.5 bg-[#F7F9FC] border border-[#DCE5EF] px-2.5 py-1.5 rounded-xl shadow-xs">
+            <Languages className="w-3.5 h-3.5 text-[#12B8C2]" />
+            <select
+              id="global-header-language-select"
+              aria-label="Interface Language"
+              value={activeLanguage}
+              onChange={(e) => setActiveLanguage(e.target.value as SupportedLanguage)}
+              className="bg-transparent text-xs font-bold text-[#14264F] outline-none cursor-pointer"
+            >
+              {SUPPORTED_LANGUAGES.map((code) => (
+                <option key={code} value={code} lang={code}>
+                  {LANGUAGE_CONFIG[code].nativeName}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* System Online Status */}
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#12B8C2] animate-pulse" />
@@ -609,7 +644,7 @@ export default function SignBridgeDashboard() {
             }`}
           >
             <Video className="w-3.5 h-3.5" />
-            <span>Meeting View</span>
+            <span>{t('nav.meetingView')}</span>
           </button>
         </div>
       </header>
@@ -619,6 +654,64 @@ export default function SignBridgeDashboard() {
         {/* ── LEFT SIDEBAR (Width ~220px) ─────────────────────────────────── */}
         <aside className="w-full md:w-[220px] bg-white border-r border-[#DCE5EF] p-4 flex md:flex-col justify-between shrink-0 shadow-sm z-20">
           <nav className="flex md:flex-col gap-1.5 w-full">
+            {/* 1. Kannada AI Science Tutor */}
+            <button
+              onClick={() => setNavSection('tutor')}
+              className={`relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all w-full text-left ${
+                navSection === 'tutor'
+                  ? 'bg-[#14264F] text-white shadow-md'
+                  : 'text-[#14264F] hover:bg-[#E7F4FC]'
+              }`}
+            >
+              {navSection === 'tutor' && (
+                <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-[#12B8C2] rounded-r-full" />
+              )}
+              <GraduationCap className={`w-4 h-4 ${navSection === 'tutor' ? 'text-[#12B8C2]' : 'text-[#14264F]'}`} />
+              <div className="flex items-center justify-between flex-1">
+                <span>{t('nav.eduTutor')}</span>
+                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#12B8C2] text-white">
+                  Class 8
+                </span>
+              </div>
+            </button>
+
+            {/* 2. Student Progress Dashboard */}
+            <button
+              onClick={() => setNavSection('studentDashboard')}
+              className={`relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all w-full text-left ${
+                navSection === 'studentDashboard'
+                  ? 'bg-[#E7F4FC] text-[#14264F] shadow-sm'
+                  : 'text-[#71809A] hover:bg-[#F7F9FC] hover:text-[#14264F]'
+              }`}
+            >
+              {navSection === 'studentDashboard' && (
+                <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-[#12B8C2] rounded-r-full" />
+              )}
+              <Award className={`w-4 h-4 ${navSection === 'studentDashboard' ? 'text-[#12B8C2]' : 'text-[#71809A]'}`} />
+              <span>{t('nav.studentDashboard')}</span>
+            </button>
+
+            {/* 3. Parent & Teacher Dashboard */}
+            <button
+              onClick={() => setNavSection('parentDashboard')}
+              className={`relative flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all w-full text-left ${
+                navSection === 'parentDashboard'
+                  ? 'bg-[#E7F4FC] text-[#14264F] shadow-sm'
+                  : 'text-[#71809A] hover:bg-[#F7F9FC] hover:text-[#14264F]'
+              }`}
+            >
+              {navSection === 'parentDashboard' && (
+                <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-[#12B8C2] rounded-r-full" />
+              )}
+              <Users className={`w-4 h-4 ${navSection === 'parentDashboard' ? 'text-[#12B8C2]' : 'text-[#71809A]'}`} />
+              <span>{t('nav.parentDashboard')}</span>
+            </button>
+
+            <div className="my-1 border-t border-[#DCE5EF] pt-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#71809A] px-2 block mb-1">
+                {language === 'kn' ? 'ಸಂವಹನ ಪರಿಕರಗಳು' : 'Sign Communication'}
+              </span>
+            </div>
             {/* Dashboard Link (Active State) */}
             <button
               onClick={() => setNavSection('dashboard')}
@@ -632,7 +725,7 @@ export default function SignBridgeDashboard() {
                 <span className="absolute left-0 top-2 bottom-2 w-1 bg-[#12B8C2] rounded-r-full" />
               )}
               <LayoutDashboard className={`w-4 h-4 ${navSection === 'dashboard' ? 'text-[#12B8C2]' : 'text-[#71809A]'}`} />
-              <span>Dashboard</span>
+              <span>{t('nav.dashboard')}</span>
             </button>
 
             {/* V14 Dedicated Bidirectional Sentence Demo */}
@@ -649,7 +742,7 @@ export default function SignBridgeDashboard() {
               )}
               <Sparkles className={`w-4 h-4 ${navSection === 'demo' ? 'text-[#12B8C2]' : 'text-[#71809A]'}`} />
               <div className="flex items-center justify-between flex-1">
-                <span>Sentence Demo</span>
+                <span>{t('nav.demo')}</span>
                 <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#12B8C2] text-white">
                   V14
                 </span>
@@ -669,7 +762,7 @@ export default function SignBridgeDashboard() {
                 <span className="absolute left-0 top-2 bottom-2 w-1 bg-[#12B8C2] rounded-r-full" />
               )}
               <Video className={`w-4 h-4 ${navSection === 'meeting' ? 'text-[#12B8C2]' : 'text-[#71809A]'}`} />
-              <span>Meeting</span>
+              <span>{t('nav.meeting')}</span>
             </button>
 
             {/* History Link */}
@@ -685,7 +778,7 @@ export default function SignBridgeDashboard() {
                 <span className="absolute left-0 top-2 bottom-2 w-1 bg-[#12B8C2] rounded-r-full" />
               )}
               <Clock className={`w-4 h-4 ${navSection === 'history' ? 'text-[#12B8C2]' : 'text-[#71809A]'}`} />
-              <span>History</span>
+              <span>{t('nav.history')}</span>
             </button>
 
             {/* Settings Link */}
@@ -1431,18 +1524,7 @@ export default function SignBridgeDashboard() {
 
                 {/* Spoken Language Selector */}
                 <div className="p-5 rounded-xl border border-[#DCE5EF] bg-[#F7F9FC] flex flex-col gap-3">
-                  <label className="text-sm font-bold text-[#14264F]">Speech Recognition Language</label>
-                  <select
-                    value={activeLanguage}
-                    onChange={(e) => setActiveLanguage(e.target.value as SupportedLanguage)}
-                    className="bg-white border border-[#DCE5EF] rounded-xl px-3 py-2 text-xs font-semibold text-[#14264F] focus:outline-none focus:ring-2 focus:ring-[#12B8C2]"
-                  >
-                    <option value="en">English (India)</option>
-                    <option value="hi">Hindi (हिंदी)</option>
-                    <option value="kn">Kannada (ಕನ್ನಡ)</option>
-                    <option value="te">Telugu (తెలుగు)</option>
-                  </select>
-                  <p className="text-[11px] text-[#71809A]">Language utilized for speech-to-sign transcription matching.</p>
+                  <p className="text-[11px] text-[#71809A]">{t('settings.speechLanguageHelp')}</p>
                 </div>
 
                 {/* TTS Speed */}

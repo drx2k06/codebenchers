@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { Activity, Radio, Volume2, ShieldCheck, Languages, BarChart3, Sparkles } from 'lucide-react';
-import { SystemState, SupportedLanguage, LatencySummary } from '@signbridge/types';
+import { SystemState, SupportedLanguage, LatencySummary, LANGUAGE_CONFIG, SUPPORTED_LANGUAGES } from '@signbridge/types';
+import { useI18n } from '../lib/i18n';
 
 interface HeaderProps {
   systemState: SystemState;
@@ -23,24 +24,26 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenMetrics,
   onOpenPresets
 }) => {
+  const { t, ttsVoiceStatus } = useI18n();
+
   const getStateBadge = (state: SystemState) => {
     switch (state) {
       case 'SIGNING':
-        return { label: 'ISL Signing Detected', bg: 'bg-teal-500/20 text-teal-300 border-teal-500/30' };
+        return { label: t('status.signing'), bg: 'bg-teal-500/20 text-teal-300 border-teal-500/30' };
       case 'LISTENING':
-        return { label: 'Speech Listening', bg: 'bg-amber-500/20 text-amber-300 border-amber-500/30' };
+        return { label: t('status.listening'), bg: 'bg-amber-500/20 text-amber-300 border-amber-500/30' };
       case 'THINKING':
-        return { label: 'AI Agent Reasoning', bg: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30 animate-pulse' };
+        return { label: t('status.thinking'), bg: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30 animate-pulse' };
       case 'RESPONDING':
-        return { label: 'Agent Response Ready', bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' };
+        return { label: t('status.responding'), bg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30' };
       case 'SPEAKING':
-        return { label: 'TTS Synthesizing', bg: 'bg-purple-500/20 text-purple-300 border-purple-500/30' };
+        return { label: t('status.speaking'), bg: 'bg-purple-500/20 text-purple-300 border-purple-500/30' };
       case 'LOW_CONFIDENCE':
-        return { label: 'Verifying Confidence', bg: 'bg-rose-500/20 text-rose-300 border-rose-500/30' };
+        return { label: t('status.lowConfidence'), bg: 'bg-rose-500/20 text-rose-300 border-rose-500/30' };
       case 'RECONNECTING':
-        return { label: 'Reconnecting Gateway', bg: 'bg-amber-500/20 text-amber-300 border-amber-500/30 animate-pulse' };
+        return { label: t('status.reconnecting'), bg: 'bg-amber-500/20 text-amber-300 border-amber-500/30 animate-pulse' };
       default:
-        return { label: 'Ready & Synchronized', bg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' };
+        return { label: t('status.ready'), bg: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' };
     }
   };
 
@@ -90,7 +93,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-600/20 hover:bg-brand-600/30 text-brand-100 border border-brand-500/40 text-xs font-medium transition"
           >
             <Sparkles className="h-3.5 w-3.5 text-brand-100" />
-            <span>Demo Scenarios</span>
+            <span>{t('header.demoScenarios')}</span>
           </button>
 
           <button
@@ -98,21 +101,32 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-elevated hover:bg-surface-highlight text-gray-300 border border-surface-highlight text-xs font-medium transition"
           >
             <BarChart3 className="h-3.5 w-3.5 text-gray-400" />
-            <span className="hidden md:inline">Telemetry</span>
+            <span className="hidden md:inline">{t('header.telemetry')}</span>
           </button>
 
           <div className="flex items-center gap-1 bg-surface-elevated px-2 py-1 rounded-lg border border-surface-highlight">
             <Languages className="h-3.5 w-3.5 text-gray-400" />
+            <label htmlFor="interface-language" className="sr-only">{t('header.interfaceLanguage')}</label>
             <select
+              id="interface-language"
               value={activeLanguage}
               onChange={(e) => onLanguageChange(e.target.value as SupportedLanguage)}
               className="bg-transparent text-xs text-gray-200 outline-none cursor-pointer"
             >
-              <option value="en" className="bg-surface text-gray-200">English</option>
-              <option value="hi" className="bg-surface text-gray-200">?????? (Hindi)</option>
-              <option value="kn" className="bg-surface text-gray-200">????? (Kannada)</option>
-              <option value="te" className="bg-surface text-gray-200">?????? (Telugu)</option>
+              {SUPPORTED_LANGUAGES.map((code) => (
+                <option key={code} value={code} lang={code} className="bg-surface text-gray-200">
+                  {LANGUAGE_CONFIG[code].nativeName}
+                </option>
+              ))}
             </select>
+            {ttsVoiceStatus === 'missing' && activeLanguage !== 'en' && (
+              <span
+                className="text-[10px] text-amber-300 whitespace-nowrap"
+                title={t('voice.missing', { language: LANGUAGE_CONFIG[activeLanguage].nativeName })}
+              >
+                {t('voice.missingShort')}
+              </span>
+            )}
           </div>
         </div>
       </div>

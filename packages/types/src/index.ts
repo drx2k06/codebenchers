@@ -18,7 +18,44 @@ export type SystemState =
   | 'ERROR'
   | 'RECONNECTING';
 
-export type SupportedLanguage = 'en' | 'hi' | 'kn' | 'te';
+export const SUPPORTED_LANGUAGES = ['en', 'hi', 'kn', 'te'] as const;
+
+export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
+
+export const DEFAULT_LANGUAGE: SupportedLanguage = 'en';
+
+export type TextDirection = 'ltr' | 'rtl';
+
+export interface LanguageConfig {
+  code: SupportedLanguage;
+  nativeName: string;
+  displayName: string;
+  /** Speech recognition locale (Web Speech API recognition.lang). */
+  sttLocale: string;
+  /** Speech synthesis locale; the browser must still provide a matching voice at runtime. */
+  ttsLocale: string;
+  direction: TextDirection;
+}
+
+/**
+ * sttLocale 'en-US' and ttsLocale 'en-IN' for English preserve existing behaviour in
+ * apps/web/src/lib/speech/stt.ts (en-US) and apps/web/src/lib/speech/tts.ts (en-IN).
+ * hi-IN, kn-IN and te-IN match the existing STT map in stt.ts.
+ */
+export const LANGUAGE_CONFIG: Record<SupportedLanguage, LanguageConfig> = {
+  en: { code: 'en', nativeName: 'English', displayName: 'English', sttLocale: 'en-US', ttsLocale: 'en-IN', direction: 'ltr' },
+  hi: { code: 'hi', nativeName: 'हिन्दी', displayName: 'Hindi', sttLocale: 'hi-IN', ttsLocale: 'hi-IN', direction: 'ltr' },
+  kn: { code: 'kn', nativeName: 'ಕನ್ನಡ', displayName: 'Kannada', sttLocale: 'kn-IN', ttsLocale: 'kn-IN', direction: 'ltr' },
+  te: { code: 'te', nativeName: 'తెలుగు', displayName: 'Telugu', sttLocale: 'te-IN', ttsLocale: 'te-IN', direction: 'ltr' },
+};
+
+export function isSupportedLanguage(value: unknown): value is SupportedLanguage {
+  return typeof value === 'string' && (SUPPORTED_LANGUAGES as readonly string[]).includes(value);
+}
+
+export function normalizeLanguage(value: unknown, fallback: SupportedLanguage = DEFAULT_LANGUAGE): SupportedLanguage {
+  return isSupportedLanguage(value) ? value : fallback;
+}
 
 export interface AlternativeCandidate {
   sign: string;
@@ -487,3 +524,4 @@ export * from './islVocabulary';
 export * from './islGrammar';
 
 
+export * from './edu';

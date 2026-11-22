@@ -45,3 +45,5 @@ ml/data/
 ml/datasets/asl/
 ml/datasets/isl/
 ml/models/sbv-gru-v1-asl/
+
+.codebenders/

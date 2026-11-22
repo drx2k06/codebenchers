@@ -1,0 +1,19 @@
+{
+  "name": "SignBridge Edu | ಸೈನ್ ಬ್ರಿಡ್ಜ್ ಶಿಕ್ಷಣ",
+  "short_name": "SignBridge Edu",
+  "description": "Accessible multilingual AI science learning platform for Karnataka State Board Class 8 students.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F9FC",
+  "theme_color": "#14264F",
+  "orientation": "portrait-primary",
+  "lang": "kn",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["education", "accessibility"]
+}

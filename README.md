@@ -1,3 +1,23 @@
+# SignBridge Edu — Multilingual AI Science Learning Platform
+
+> **"Transforming multimodal accessibility into high-impact education for underprivileged learners."**
+
+SignBridge Edu enhances the SignBridge platform with an offline-first, multilingual AI Science tutor specifically architected for:
+- **Class 8 students** studying under the **Karnataka State Board**.
+- **Kannada** as the primary language of instruction (with English scientific terms in parentheses).
+- **Basic shared smartphones** with low bandwidth or intermittent connectivity.
+- **Everyday rural analogies** (farming, well pulleys, bicycle friction, curd fermentation, temple bells).
+
+### Key Educational Capabilities:
+1. **Karnataka State Board Class 8 Science Curriculum**: Authentic chapter modules (Crop Production, Microbes, Force & Pressure, Sound, Light) with lesson explanations and takeaway summaries.
+2. **Kannada AI Science Tutor**: Instant doubt resolution via text, voice (`kn-IN`), or photo question upload (client-side compressed for minimal data consumption).
+3. **Adaptive Difficulty Engine**: Promotes/demotes practice difficulty (`easy`, `medium`, `hard`) dynamically with Kannada remedial hints upon mistakes.
+4. **Offline-First PWA Architecture**: Service worker caching, local progress storage in `localStorage`, and pending sync queue with automatic background flushing on network reconnection.
+5. **Student & Parent Dashboards**: Subject mastery tracking (0-100%), streaks, weak concept alerts, and a non-technical Kannada parent view.
+6. **Preserved ISL Engine**: Full bidirectional ISL sign recognition, 3D avatar animation, and real-time WebSocket communication remain functional.
+
+---
+
 # SignBridge: Real-Time Multimodal AI Communication Platform
 
 > **"SignBridge turns different communication modalities into one shared conversation."**

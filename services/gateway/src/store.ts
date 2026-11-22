@@ -4,7 +4,8 @@ import {
   LatencyMetricRecord,
   LatencySummary,
   SupportedLanguage,
-  SpeakerRole
+  SpeakerRole,
+  DEFAULT_LANGUAGE
 } from '@signbridge/types';
 
 export class SessionStore {
@@ -22,7 +23,7 @@ export class SessionStore {
       title,
       startedAt: Date.now(),
       participants: [],
-      activeLanguage: 'en',
+      activeLanguage: DEFAULT_LANGUAGE,
       messages: []
     };
     this.sessions.set(id, session);

@@ -1,4 +1,31 @@
-import { SupportedLanguage } from '@signbridge/types';
+import { DEFAULT_LANGUAGE, LANGUAGE_CONFIG, SupportedLanguage } from '@signbridge/types';
+
+export type VoiceStatus = 'available' | 'missing' | 'unknown';
+
+const normalizeTag = (tag: string) => tag.trim().toLowerCase().replace(/_/g, '-');
+
+/**
+ * Find an installed voice for a language. Prefers an exact match on the configured
+ * ttsLocale; otherwise accepts any voice sharing the same primary subtag (e.g. "kn").
+ */
+export function findVoiceForLanguage<V extends { lang: string }>(
+  language: SupportedLanguage,
+  voices: V[],
+): V | undefined {
+  const target = normalizeTag(LANGUAGE_CONFIG[language].ttsLocale);
+  const exact = voices.find((v) => normalizeTag(v.lang) === target);
+  if (exact) return exact;
+  const primary = target.split('-')[0];
+  return voices.find((v) => normalizeTag(v.lang).split('-')[0] === primary);
+}
+
+export function getVoiceStatusForLanguage<V extends { lang: string }>(
+  language: SupportedLanguage,
+  voices: V[],
+): VoiceStatus {
+  if (voices.length === 0) return 'unknown';
+  return findVoiceForLanguage(language, voices) ? 'available' : 'missing';
+}
 
 export class TTSPlayer {
   private synth: SpeechSynthesis | null = null;
@@ -11,20 +38,22 @@ export class TTSPlayer {
     }
   }
 
-  public speak(text: string, language: SupportedLanguage = 'en', onEnd?: () => void) {
-    if (!this.synth) return;
+  public speak(text: string, language: SupportedLanguage = DEFAULT_LANGUAGE, onEnd?: () => void): boolean {
+    if (!this.synth) return false;
+
+    const voices = this.synth.getVoices();
+    if (language !== DEFAULT_LANGUAGE && getVoiceStatusForLanguage(language, voices) === 'missing') {
+      console.warn(`[TTS] No voice installed for ${LANGUAGE_CONFIG[language].ttsLocale}; spoken output skipped.`);
+      return false;
+    }
 
     // Interrupt any ongoing utterance to keep perceived latency low
     this.synth.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    const langMap: Record<SupportedLanguage, string> = {
-      en: 'en-IN',
-      hi: 'hi-IN',
-      kn: 'kn-IN',
-      te: 'te-IN'
-    };
-    utterance.lang = langMap[language] || 'en-IN';
+    utterance.lang = LANGUAGE_CONFIG[language].ttsLocale;
+    const voice = findVoiceForLanguage(language, voices);
+    if (voice) utterance.voice = voice;
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
 
@@ -45,6 +74,7 @@ export class TTSPlayer {
     };
 
     this.synth.speak(utterance);
+    return true;
   }
 
   public stop() {

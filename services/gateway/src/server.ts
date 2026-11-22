@@ -9,15 +9,18 @@ import {
   SystemState,
   LatencyMetricRecord,
   ISL_VOCABULARY,
-  DEMO_SCENARIO_PRESETS
+  DEMO_SCENARIO_PRESETS,
+  DEFAULT_LANGUAGE,
+  normalizeLanguage
 } from '@signbridge/types';
 import { sessionStore } from './store';
 import { conversationalAgent } from './agent';
 import { speechService } from './speech';
+import { kannadaTutorService } from './tutorAgent';
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 const PORT = process.env.PORT || 4000;
 const server = http.createServer(app);
@@ -75,7 +78,7 @@ wss.on('connection', (ws: WebSocket) => {
               id: currentClient.clientId,
               name: data.clientName,
               role: currentClient.role,
-              preferredLanguage: data.preferredLanguage || 'en'
+              preferredLanguage: normalizeLanguage(data.preferredLanguage)
             });
           }
           const currentSession = sessionStore.getOrCreateSession(currentClient.sessionId);
@@ -180,7 +183,7 @@ wss.on('connection', (ws: WebSocket) => {
             text: normalized,
             normalizedText: normalized,
             confidence: speechEvent.confidence || 0.95,
-            language: speechEvent.language || 'en',
+            language: normalizeLanguage(speechEvent.language),
             timestamp: Date.now(),
             status: 'final'
           };
@@ -242,7 +245,7 @@ wss.on('connection', (ws: WebSocket) => {
             text: rawMsg.text,
             normalizedText: rawMsg.text,
             confidence: 1.0,
-            language: rawMsg.language || 'en',
+            language: normalizeLanguage(rawMsg.language),
             timestamp: Date.now(),
             status: 'final'
           };
@@ -305,6 +308,40 @@ app.get('/api/sessions/:id', (req, res) => {
 
 app.get('/api/metrics', (req, res) => {
   res.json(sessionStore.getLatencySummary());
+});
+
+
+app.post('/api/tutor/doubt', async (req, res) => {
+  try {
+    const { question, topicId, language, imageBase64 } = req.body;
+    if (!question && !imageBase64) {
+      return res.status(400).json({ error: 'Question or image is required' });
+    }
+    const result = await kannadaTutorService.resolveDoubt({
+      question: question || 'Please explain the science problem in this image',
+      topicId,
+      language,
+      imageBase64,
+    });
+    res.json(result);
+  } catch (err) {
+    console.error('Error in /api/tutor/doubt:', err);
+    res.status(500).json({ error: 'Internal tutor error' });
+  }
+});
+
+app.post('/api/sync/progress', (req, res) => {
+  try {
+    const { actions, progress } = req.body;
+    console.log(`[Gateway] Received progress sync with ${actions?.length || 0} actions`);
+    res.json({
+      success: true,
+      syncedCount: actions?.length || 0,
+      serverTimestamp: Date.now(),
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Sync error' });
+  }
 });
 
 server.listen(PORT, () => {

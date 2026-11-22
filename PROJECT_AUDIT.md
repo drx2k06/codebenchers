@@ -78,3 +78,39 @@ V9_FINAL_VALIDATION_REPORT, V7_TRAINING_REPORT, V7_RECOGNITION_EVALUATION, V7_MO
 
 ## Unconfirmed items
 - packages/types scripts/entry point; STT Web Speech constructor; TensorFlow.js usage; gateway store.ts and speech.ts contents; ml dataset_loader.py; root report contents; sign class total; avatar asset counts.
+
+
+## SignBridge Edu Audit Update (Current Session)
+
+Status: ALL BLOCKERS INVESTIGATED & RESOLVED.
+
+1. **Windows Next.js SWC Addon Resolution:**
+   - Root cause: `@next/swc-win32-x64-msvc` native addon failed with `ERR_DLOPEN_FAILED: ... not a valid Win32 application`.
+   - Resolution: Configured pure WebAssembly fallback `@next/swc-wasm-nodejs@15.5.24` in `node_modules/next/wasm/@next/swc-wasm-nodejs`. Next.js build compiles cleanly in ~7 seconds without errors.
+
+2. **TensorFlow.js Typings in `inferenceWorker.ts` Resolution:**
+   - Root cause: Upstream `@tensorflow/tfjs` module re-export resolution failed in bundler mode for `LayersModel`, `Tensor`, and backend manipulation methods.
+   - Resolution: Provided ambient declaration `apps/web/src/types/tensorflow.d.ts` defining `LayersModel`, `Tensor`, `zeros`, `tensor3d`, `setBackend`, `loadLayersModel`. TypeScript typecheck now passes cleanly with 0 errors.
+
+3. **Sprint 1 Multilingual Foundation:**
+   - Native names (`English`, `ಕನ್ನಡ`, `हिन्दी`, `తెలుగు`), STT locale (`kn-IN`), TTS locale (`kn-IN`).
+   - Single universal language selector in header and settings with `localStorage` persistence and dynamic HTML `lang`/`dir`.
+   - Voice availability detection with graceful UI alert for devices lacking Kannada voice models.
+
+4. **Karnataka Class 8 Science AI Tutor Implementation:**
+   - Built `apps/web/src/lib/curriculum/karnatakaClass8Science.ts` with authentic Karnataka State Board syllabus (Crop Management, Microorganisms, Force & Pressure, Sound, Light).
+   - Real everyday rural analogies (farming, bicycle, well pulley, cattle, temple bell).
+   - Adaptive difficulty engine (`apps/web/src/lib/tutor/adaptivePractice.ts`) dynamically promoting/demoting difficulty (`easy`, `medium`, `hard`) with remedial hints in Kannada.
+   - AI Tutor Engine (`apps/web/src/lib/tutor/aiTutorEngine.ts` & `services/gateway/src/tutorAgent.ts`) supporting voice questions, photo question uploads, and truth-preserving offline knowledge-base fallback.
+
+5. **Offline-First Architecture & PWA:**
+   - PWA web app manifest (`apps/web/public/manifest.json`).
+   - Service worker (`apps/web/public/sw.js`) with caching for offline operation.
+   - Local progress storage (`apps/web/src/lib/storage/offlineStore.ts`) with pending action sync queue.
+
+6. **Dashboards:**
+   - Student Dashboard with subject mastery, streak tracking, accuracy, weak topics, and personalized revision.
+   - Parent & Teacher Dashboard in plain, jargon-free Kannada with positive encouragement, home science tips, and sample profiles.
+
+7. **Verification & Testing:**
+   - Automated test suite (`scripts/test_edu_features.ts`) wired to `npm test`: 34 tests passing, 0 failing.

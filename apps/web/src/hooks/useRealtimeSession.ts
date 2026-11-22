@@ -11,13 +11,14 @@ import {
   SpeechTranscriptEvent,
   LatencySummary
 } from '@signbridge/types';
+import { useI18n } from '../lib/i18n';
 
 export function useRealtimeSession(sessionId: string = 'main-room', userRole: SpeakerRole = 'isl_signer') {
   const [session, setSession] = useState<ConversationSession | null>(null);
   const [messages, setMessages] = useState<CanonicalMessage[]>([]);
   const [systemState, setSystemState] = useState<SystemState>('IDLE');
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [activeLanguage, setActiveLanguage] = useState<SupportedLanguage>('en');
+  const { language: activeLanguage, setLanguage: setActiveLanguage } = useI18n();
   const [partialSpeech, setPartialSpeech] = useState<string>('');
   const [activeProvisionalSign, setActiveProvisionalSign] = useState<{ sign: string; label: string; confidence: number } | null>(null);
   const [latencyMetrics, setLatencyMetrics] = useState<{ overall: LatencySummary; visionSummary: LatencySummary; agentSummary: LatencySummary } | null>(null);
@@ -55,7 +56,7 @@ export function useRealtimeSession(sessionId: string = 'main-room', userRole: Sp
               if (data.session) {
                 setSession(data.session);
                 setMessages(data.session.messages || []);
-                setActiveLanguage(data.session.activeLanguage || 'en');
+                // saved language preference is owned by the i18n provider
               }
               if (data.latencyMetrics) {
                 setLatencyMetrics(data.latencyMetrics);

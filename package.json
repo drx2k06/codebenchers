@@ -19,10 +19,14 @@
     "train:prototype": "npm --workspace=ml run train:prototype",
     "collect:data": "npm --workspace=ml run collect:data",
     "generate:bootstrap": "npm --workspace=ml run generate:bootstrap",
-    "test:gateway": "npm --workspace=services/gateway run test"
+    "test:gateway": "npm --workspace=services/gateway run test",
+    "test": "ts-node -T -O \"{\\\"module\\\":\\\"commonjs\\\"}\" scripts/test_edu_features.ts"
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
     "typescript": "^5.7.3"
+  },
+  "optionalDependencies": {
+    "@next/swc-wasm-nodejs": "^15.5.24"
   }
 }

@@ -14,7 +14,7 @@
  *   - Supported locales: en (en-US / en-IN), hi-IN, kn-IN, te-IN
  */
 
-import { SupportedLanguage } from '@signbridge/types';
+import { DEFAULT_LANGUAGE, LANGUAGE_CONFIG, SupportedLanguage } from '@signbridge/types';
 import { ttsPlayer } from './tts';
 
 export type SpeechClientStatus =
@@ -213,14 +213,7 @@ export class StreamingSTTClient {
       recog.interimResults = true;
       recog.maxAlternatives = 1;
 
-      // Locale mapping
-      const langMap: Record<SupportedLanguage, string> = {
-        en: 'en-US',
-        hi: 'hi-IN',
-        kn: 'kn-IN',
-        te: 'te-IN',
-      };
-      recog.lang = langMap[this.options.language] || 'en-US';
+      recog.lang = (LANGUAGE_CONFIG[this.options.language] ?? LANGUAGE_CONFIG[DEFAULT_LANGUAGE]).sttLocale;
 
       recog.onstart = () => {
         this.isListening = true;
